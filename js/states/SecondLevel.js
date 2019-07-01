@@ -170,5 +170,44 @@ init: function() {
     gameOverPanel.start();
     
   },
-   
+    eliminarenemigo: function(player,enemys){
+        if (enemys.body.touching.up) {
+            enemys.body.bounce.set(0,1);
+       //player.body.bounce.set(0,10;
+        }else{
+            vidas--;
+        alert(vidas);
+        }
+        //enemys.kill();
+        
+        //enemys.body.bounce.set(0,1);
+        //player.body.bounce.set(0,1);
+        if(vidas == 0){
+            vidas =5;
+           this.gameOver();
+        }
+        
+    },
+  restart: function(){
+    this.game.world.remove(this.background);
+    this.game.world.remove(this.water);
+    
+    this.game.state.start('SecondLevel');
+  },
+    sumarvida: function(player, corazon){
+    corazon.kill();
+        vidas++;
+  },
+  updateHighscore: function(){
+    this.highScore = +localStorage.getItem('highScore');
+    
+    //do we have a new high score
+    if(this.highScore < this.myCoins){
+      this.highScore = this.myCoins;
+      
+      //save new high score
+      localStorage.setItem('highScore', this.highScore);
+    }
+  }   
+    
 };
