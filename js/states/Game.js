@@ -227,5 +227,53 @@ MrHop.GameState = {
       
      
   },  
+    
+    collectCoin: function(player, coin){
+    coin.kill();    
+    this.myCoins++;
+    this.coinSound.play();
+    this.coinsCountLabel.text = this.myCoins;
+  }, 
+     gameOver: function(){
+    this.player.kill();    
+    this.updateHighscore();
+    
+    //game over overlay
+    this.overlay = this.add.bitmapData(this.game.width, this.game.height);
+    this.overlay.ctx.fillStyle = '#000';
+    this.overlay.ctx.fillRect(0, 0, this.game.width, this.game.height);
+    
+    //sprite for the overlay
+    this.panel = this.add.sprite(0, this.game.height, this.overlay);
+    this.panel.alpha = 0.55;
+    
+    //overlay raising tween animation
+    var gameOverPanel = this.add.tween(this.panel);
+    gameOverPanel.to({y: 0}, 500);
+    
+    //stop all movement after the overlay reaches the top
+    gameOverPanel.onComplete.add(function(){
+      this.water.stopScroll();
+      this.background.stopScroll();
+      
+      var style = {font: '30px Arial', fill: '#fff'};
+      this.add.text(this.game.width/2, this.game.height/2, 'GAME OVER', style).anchor.setTo(0.5);
+      
+      style = {font: '20px Arial', fill: '#fff'};
+      this.add.text(this.game.width/2, this.game.height/2 + 50, 'High score: ' + this.highScore, style).anchor.setTo(0.5);
+      
+      this.add.text(this.game.width/2, this.game.height/2 + 80, 'Your score: ' + this.myCoins, style).anchor.setTo(0.5);
+      
+      style = {font: '10px Arial', fill: '#fff'};
+      this.add.text(this.game.width/2, this.game.height/2 + 120, 'Tap to play again', style).anchor.setTo(0.5);
+      
+      this.game.input.onDown.addOnce(this.restart, this);
+      
+      
+    }, this);
+    
+    gameOverPanel.start();
+    
+  },    
      
 };
