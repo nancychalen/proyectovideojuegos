@@ -99,6 +99,58 @@ MrHop.GameState = {
 //    lifeText.fixedToCamera = true;
 },   
   
-    
+    update: function() {    
+    if(this.player.alive) {
+      this.platformPool.forEachAlive(function(platform, index){
+        this.game.physics.arcade.collide(this.player, platform);
+                this.game.physics.arcade.collide(this.player, this.enemys, this.eliminarenemigo,null,this);
+
+
+        //check if a platform needs to be killed
+        if(platform.length && platform.children[platform.length-1].right < 0) {
+          platform.kill();
+        }    
+      }, this);   
+
+      this.game.physics.arcade.overlap(this.player, this.coinsPool, this.collectCoin, null, this);
+
+      if(this.player.body.touching.down) {
+        this.player.body.velocity.x = this.levelSpeed;
+      }
+      else {
+        this.player.body.velocity.x = 0;
+      }
+
+      if(this.cursors.up.isDown || this.game.input.activePointer.isDown) {
+        this.playerJump();
+      }
+      else if(this.cursors.up.isUp || this.game.input.activePointer.isUp) {
+        this.isJumping = false;
+      }
+
+      if(this.currentPlatform.length && this.currentPlatform.children[this.currentPlatform.length-1].right < this.game.world.width) {
+        this.createPlatform();
+      }
+      
+      //check if the player needs to die
+      if(this.player.top >= this.game.world.height || this.player.left <= 0) {
+        this.gameOver();
+      }
+      if(this.myCoins==3){
+          this.game.world.remove(this.background);
+          this.game.world.remove(this.water);
+          this.game.state.start('SecondLevel');
+         
+      }
+      //kill coins that leave the screen
+      this.coinsPool.forEachAlive(function(coin){
+		  if(coin.right <= 0) {
+			  coin.kill();
+		  }
+	  }, this);
+    }
+     
+  },
+  
   
 };
