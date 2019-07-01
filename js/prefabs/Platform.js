@@ -45,4 +45,41 @@ MrHop.Platform.prototype.prepare = function(numTiles, x, y, speed) {
   
 };
 
+MrHop.Platform.prototype.kill = function(){
+  this.alive = false;  
+  this.callAll('kill');
+  
+  var sprites = [];
+  this.forEach(function(tile){
+    sprites.push(tile);
+  }, this);
+  
+  sprites.forEach(function(tile){
+    this.floorPool.add(tile);
+  }, this);
+};
+
+MrHop.Platform.prototype.addCoins = function(speed){
+  var coinsY = 90 + Math.random() * 110;
+  
+  var hasCoin;
+  this.forEach(function(tile){
+    //40% chance
+    hasCoin = Math.random() <= 0.4;
+    
+    if(hasCoin) {
+      var coin = this.coinsPool.getFirstExists(false);
+      
+      if(!coin) {
+        coin = new Phaser.Sprite(this.game, tile.x, tile.y - coinsY, 'coin');
+        this.coinsPool.add(coin);
+      }
+      else {
+        coin.reset(tile.x, tile.y - coinsY);
+      }
+      
+      coin.body.velocity.x = speed;
+      coin.body.allowGravity = false;
+    }
+  }, this);
 };
