@@ -274,6 +274,41 @@ MrHop.GameState = {
     
     gameOverPanel.start();
     
-  },    
-     
+  },   
+     eliminarenemigo: function(player,enemys){
+        enemys.kill();
+        vidas--;
+        alert(vidas);
+        if(vidas == 0){
+            vidas = 2;
+           this.gameOver();
+           }
+        
+    },
+  restart: function(){
+    //current bug with tileSprite on v2.3, have to manually remove the sprites from the world before launching a different state
+    //http://www.html5gamedevs.com/topic/13843-events-linger-after-remove-and-destroy/
+    this.game.world.remove(this.background);
+    this.game.world.remove(this.water);
+    
+    this.game.state.start('Game');
+  },
+  updateHighscore: function(){
+    this.highScore = +localStorage.getItem('highScore');
+    
+    //do we have a new high score
+    if(this.highScore < this.myCoins){
+      this.highScore = this.myCoins;
+      
+      //save new high score
+      localStorage.setItem('highScore', this.highScore);
+    }
+  }
+
+  
+  /*render: function() {
+    this.game.debug.body(this.player);
+    this.game.debug.bodyInfo(this.player, 0, 30);
+  }*/
+          
 };
