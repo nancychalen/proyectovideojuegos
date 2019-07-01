@@ -174,5 +174,32 @@ MrHop.GameState = {
       }
     } 
   },
+    
+    
+    
+     loadLevel: function(){
+          
+    this.createPlatform();
+  },
+    
+  createPlatform: function(){
+    var nextPlatformData = this.generateRandomPlatform();
+    
+    if(nextPlatformData) {
+      
+      this.currentPlatform = this.platformPool.getFirstDead();
+      
+      if(!this.currentPlatform) {
+        this.currentPlatform = new MrHop.Platform(this.game, this.floorPool, nextPlatformData.numTiles, this.game.world.width + nextPlatformData.separation, nextPlatformData.y, -this.levelSpeed, this.coinsPool);   
+      }
+      else {
+        this.currentPlatform.prepare(nextPlatformData.numTiles, this.game.world.width + nextPlatformData.separation, nextPlatformData.y, -this.levelSpeed);   
+      }
+
+      this.platformPool.add(this.currentPlatform);
+
+    }
+  },
+   
      
 };
