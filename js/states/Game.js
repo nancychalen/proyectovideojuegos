@@ -200,6 +200,32 @@ MrHop.GameState = {
 
     }
   },
-   
+    
+     generateRandomPlatform: function() {
+    
+    var data = {};
+    
+    //distance from the previous platform
+    var minSeparation = 60;
+    var maxSeparation = 100;
+    data.separation = minSeparation + Math.random() * (maxSeparation - minSeparation);
+    
+    //y in regards to the previous platform
+    var minDifY = -120;
+    var maxDifY = 120;    
+    
+    data.y = this.currentPlatform.children[0].y + minDifY + Math.random() * (maxDifY - minDifY);
+    data.y = Math.max(150, data.y);
+    data.y = Math.min(this.game.world.height - 50, data.y);
+        
+    //numberde coraoznes 
+    var minTiles = 1;
+    var maxTiles = 5;
+    data.numTiles = minTiles + Math.random() * (maxTiles - minTiles);
+      
+    return data;
+      
+     
+  },  
      
 };
