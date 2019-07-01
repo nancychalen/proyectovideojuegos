@@ -151,6 +151,28 @@ MrHop.GameState = {
     }
      
   },
-  
-  
+    
+    playerJump: function(){
+    if(this.player.body.touching.down) {
+      //starting point of the jump
+      this.startJumpY = this.player.y;
+      
+      //keep track of the fact that it is jumping
+      this.isJumping = true;
+      this.jumpPeaked = false;
+      
+      this.player.body.velocity.y = -300;
+    }
+    else if(this.isJumping && !this.jumpPeaked) {
+      var distanceJumped = this.startJumpY - this.player.y;
+      
+      if(distanceJumped <= this.maxJumpDistance) {
+        this.player.body.velocity.y = -300;
+      }
+      else {
+        this.jumpPeaked = true;
+      }
+    } 
+  },
+     
 };
