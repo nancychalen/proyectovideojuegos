@@ -97,4 +97,38 @@ init: function() {
     this.platformPool.add(this.currentPlatform);      
   },   
   
+ update: function() {    
+      this.platformPool.forEachAlive(function(platform, index){
+        this.game.physics.arcade.collide(this.player, platform);
+      }, this);  
+      //this.game.physics.arcade.collide(this.player, this.enemys, this.eliminarenemigo,null,this);
+       this.game.physics.arcade.collide(this.player, this.enemys2, this.eliminarenemigo,null,this);
+      this.game.physics.arcade.collide(this.player, this.enemys3, this.eliminarenemigo,null,this);
+      //this.game.physics.arcade.collide(this.player, this.enemys1,this.eliminarenemigo,null,this);
+      this.game.physics.arcade.collide(this.player, this.coinsPool,this.sumarvida,null,this);
+      this.game.physics.arcade.overlap(this.player, this.coinsPool, this.collectCoin ,null, this);
+
+      this.player.body.velocity.x = 0;
+      if(this.cursors.left.isDown || this.player.customParams.isMovingLeft) {
+      this.player.body.velocity.x = -this.RUNNING_SPEED;
+      this.player.scale.setTo(-0.8, 0.8);
+      this.player.play('running');
+    }
+    else if(this.cursors.right.isDown || this.player.customParams.isMovingRight) {
+      this.player.body.velocity.x = this.RUNNING_SPEED;
+      this.player.scale.setTo(0.8, 0.8);
+      this.player.play('running');
+    }
+    else {
+      this.player.animations.stop();
+      this.player.frame = 3;
+    }
+
+    if((this.cursors.up.isDown || this.player.customParams.mustJump) && this.player.body.touching.down) {
+      this.player.body.velocity.y = -this.JUMPING_SPEED;
+      this.player.customParams.mustJump = false;
+        
+    }
+  },
+    
 };
